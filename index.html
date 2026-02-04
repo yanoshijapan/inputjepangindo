@@ -3,142 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Input JP-ID</title>
+    <title>Cek Barang Japan - Indo</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: '#076eb3', 
+                            dark: '#055a91',
+                            light: '#e0f2fe'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #0f0c29;
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-            min-height: 100vh;
-            color: white;
+            background-color: #f8fafc;
+            color: #334155;
+            /* --- PERBAIKAN POSISI: --- */
+            /* Jarak atas diperbesar jadi 180px agar konten turun jauh ke bawah header */
+            padding-top: 500px; 
+            padding-bottom: 120px; 
         }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        @media (min-width: 1024px) {
+            body { padding-bottom: 4rem; } 
         }
-        .input-glass {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+        
+        /* Header Style */
+        .glass-header {
+            background: rgba(255, 255, 255, 0.98); /* Lebih solid agar tidak transparan tabrakan */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+            height: 90px;
         }
-        .input-glass:focus {
-            background: rgba(0, 0, 0, 0.4);
-            border-color: #db2777;
+
+        .input-modern {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+            color: #1e293b;
+        }
+        .input-modern:focus {
+            border-color: #076eb3;
+            box-shadow: 0 0 0 3px rgba(7, 110, 179, 0.1);
             outline: none;
         }
-        /* Animasi Card */
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .queue-card { animation: slideIn 0.3s ease-out forwards; }
-        
         .loader {
-            width: 48px; height: 48px;
-            border: 5px solid #FFF;
-            border-bottom-color: #db2777;
+            width: 24px; height: 24px;
+            border: 3px solid #FFF;
+            border-bottom-color: transparent;
             border-radius: 50%;
             display: inline-block;
             animation: rotation 1s linear infinite;
         }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up { animation: slideUp 0.4s ease-out forwards; }
     </style>
 </head>
-<body class="p-4 md:p-8 flex justify-center items-start min-h-screen">
+<body class="p-4 md:p-8 min-h-screen flex justify-center items-start">
 
-    <div class="glass-panel w-full max-w-6xl rounded-3xl overflow-hidden shadow-2xl relative flex flex-col lg:flex-row">
+    <nav class="glass-header fixed top-0 left-0 w-full z-[100] flex items-center justify-between px-4 md:px-8">
+        <div class="flex items-center gap-3">
+            <img src="https://yanoshijapan.github.io/asetonline/jastiplogo.png" alt="Yanoshi Logo" class="h-12 md:h-14 object-contain hover:scale-105 transition-transform">
+        </div>
+
+        <div class="flex items-center gap-2 md:gap-4">
+            <a href="https://docs.google.com/spreadsheets/d/1jZGl8WzxS5y3U2HVSUKVj8Bos-C8laZCRlQbXtvoY0Y/edit?gid=175322993#gid=175322993" target="_blank" 
+               class="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-500 hover:text-green-600 hover:bg-green-50 transition-all border border-transparent hover:border-green-100 group" title="Buka Spreadsheet">
+                <svg class="w-7 h-7 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <span class="hidden md:block text-xs font-semibold">Spreadsheet</span>
+            </a>
+            
+            <a href="https://yanoshijastip.github.io/portal/" target="_blank" 
+               class="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-500 hover:text-brand hover:bg-brand-light transition-all border border-transparent hover:border-brand-light group" title="Portal Admin">
+                <svg class="w-7 h-7 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span class="hidden md:block text-xs font-semibold">Portal</span>
+            </a>
+        </div>
+    </nav>
+    <div class="w-full max-w-6xl bg-white rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden flex flex-col lg:flex-row relative z-10 mt-20">
         
-        <div class="w-full lg:w-7/12 p-6 md:p-8 border-b lg:border-b-0 lg:border-r border-white/10 relative">
-            <h2 class="text-xl font-bold text-pink-400 mb-4 flex items-center gap-2">
-                <span class="w-2 h-8 bg-pink-500 rounded-full"></span>
-                INPUT DATA BARU
-            </h2>
+        <div class="w-full lg:w-7/12 p-6 md:p-10 border-b lg:border-b-0 lg:border-r border-slate-100">
+            
+            <div class="mb-8 flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Cek Barang JP-ID</h1>
+                    <p class="text-sm text-slate-500 mt-1">Input data dari whatsapp>
+                </div>
+                <div id="saveStatus" class="hidden text-xs font-bold text-brand bg-brand-light px-3 py-1.5 rounded-full animate-pulse flex items-center gap-1 transition-all">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Tersimpan
+                </div>
+            </div>
 
-            <div class="mb-4">
+            <div class="mb-8">
+                <div class="flex justify-between items-end mb-2">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">1. Paste Data Mentah</label>
+                </div>
                 <textarea id="rawInput" rows="6" 
-                    class="input-glass w-full rounded-xl p-4 text-sm text-gray-100 placeholder-gray-500 font-mono" 
-                    placeholder="Paste chat disini... (Unboxing, Nama, Barang, dll)"></textarea>
+                    class="input-modern w-full rounded-2xl p-5 text-sm font-mono leading-relaxed" 
+                    placeholder="Contoh format:&#10;Unboxing Budi&#10;Celana, Kemeja&#10;Kode 12&#10;Berat 20kg"></textarea>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 mb-4">
-                <div class="col-span-1">
-                    <label class="text-[10px] uppercase text-gray-400 tracking-wider">Kode</label>
-                    <input type="text" id="pKode" class="input-glass w-full rounded-lg p-2 text-yellow-300 font-bold">
-                </div>
-                <div class="col-span-1">
-                    <label class="text-[10px] uppercase text-gray-400 tracking-wider">Berat (Kg)</label>
-                    <input type="text" id="pBerat" class="input-glass w-full rounded-lg p-2 text-green-300 font-bold">
-                </div>
-                <div class="col-span-2">
-                    <label class="text-[10px] uppercase text-gray-400 tracking-wider">Nama</label>
-                    <input type="text" id="pNama" class="input-glass w-full rounded-lg p-2 text-white font-semibold capitalize">
-                </div>
-                <div class="col-span-2">
-                    <label class="text-[10px] uppercase text-gray-400 tracking-wider">Barang</label>
-                    <textarea id="pBarang" rows="2" class="input-glass w-full rounded-lg p-2 text-sm text-gray-300"></textarea>
+            <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100 mb-8">
+                <label class="block text-xs font-bold text-brand uppercase tracking-wider mb-4">2. Verifikasi Data</label>
+                
+                <div class="grid grid-cols-12 gap-5">
+                    <div class="col-span-4">
+                        <label class="text-[10px] text-slate-400 font-bold uppercase block mb-1.5">Kode</label>
+                        <input type="text" id="pKode" class="input-modern w-full rounded-xl px-4 py-3 font-bold text-brand text-center text-lg">
+                    </div>
+                    <div class="col-span-4">
+                        <label class="text-[10px] text-slate-400 font-bold uppercase block mb-1.5">Berat</label>
+                        <input type="text" id="pBerat" class="input-modern w-full rounded-xl px-4 py-3 font-bold text-slate-700 text-center text-lg">
+                    </div>
+                    <div class="col-span-12 md:col-span-4">
+                        <label class="text-[10px] text-slate-400 font-bold uppercase block mb-1.5">Nama</label>
+                        <input type="text" id="pNama" class="input-modern w-full rounded-xl px-4 py-3 font-semibold text-slate-900 capitalize text-lg">
+                    </div>
+                    
+                    <div class="col-span-12">
+                        <label class="text-[10px] text-slate-400 font-bold uppercase block mb-1.5">Barang</label>
+                        <textarea id="pBarang" rows="3" class="input-modern w-full rounded-xl px-4 py-3 text-sm text-slate-600 leading-snug" placeholder="List barang otomatis muncul..."></textarea>
+                    </div>
                 </div>
             </div>
 
-            <div class="mb-6">
-                <label class="text-[10px] uppercase text-gray-400 tracking-wider mb-2 block">Foto (Max 10)</label>
-                <div class="flex gap-4 items-start">
-                    <label for="imageInput" class="cursor-pointer bg-white/5 border border-dashed border-gray-500 hover:border-pink-500 rounded-xl w-24 h-24 flex flex-col items-center justify-center transition text-gray-400 hover:text-pink-500">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                        <span class="text-[10px] mt-1">Pilih Foto</span>
+            <div class="mb-8">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">3. Upload Foto (Max 10)</label>
+                <div class="flex gap-4 flex-col sm:flex-row">
+                    <label class="flex-shrink-0 w-full sm:w-28 h-28 rounded-2xl border-2 border-dashed border-slate-300 hover:border-brand hover:bg-brand-light/30 cursor-pointer flex flex-col items-center justify-center transition-all group bg-white">
+                        <svg class="w-8 h-8 text-slate-400 group-hover:text-brand mb-1 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        <span class="text-[10px] font-bold text-slate-400 group-hover:text-brand transition-colors">Pilih Foto</span>
                         <input id="imageInput" type="file" multiple accept="image/*" class="hidden" />
                     </label>
-                    <div id="previewGallery" class="flex-1 flex gap-2 overflow-x-auto pb-2 h-24">
-                        </div>
+                    <div id="previewGallery" class="flex gap-3 overflow-x-auto h-28 w-full min-h-[112px] bg-slate-50 rounded-2xl p-3 items-center border border-slate-100">
+                        <span class="text-xs text-slate-400 italic mx-auto font-medium" id="galleryPlaceholder">Belum ada foto dipilih</span>
+                    </div>
                 </div>
+                <p class="text-[10px] text-brand mt-2 font-medium hidden bg-brand-light inline-block px-2 py-1 rounded-md" id="restoredNotice">
+                    <span class="font-bold">Info:</span> Foto dipulihkan dari penyimpanan sementara
+                </p>
             </div>
 
-            <button onclick="addToQueue()" id="btnAdd" class="w-full bg-blue-600/80 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg border border-blue-400/30 transition flex justify-center items-center gap-2 group">
-                <svg class="w-5 h-5 group-hover:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                <span>+ TAMBAH KE ANTRIAN</span>
+            <button onclick="addToQueue()" id="btnAdd" class="w-full bg-brand hover:bg-brand-dark text-white font-bold text-lg py-5 px-6 rounded-2xl shadow-xl shadow-brand/20 transition-all active:scale-[0.98] flex justify-center items-center gap-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                TAMBAH KE ANTRIAN
             </button>
         </div>
 
-        <div class="w-full lg:w-5/12 bg-black/20 flex flex-col h-full min-h-[500px]">
-            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
-                <h3 class="text-lg font-bold text-white">Daftar Antrian</h3>
-                <span id="queueCount" class="bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded-md">0 Item</span>
-            </div>
+        <div class="w-full lg:w-5/12 bg-slate-50 flex flex-col h-auto border-l border-slate-100 relative">
             
-            <div id="queueContainer" class="flex-1 p-6 overflow-y-auto space-y-4">
-                <div id="emptyState" class="text-center text-gray-500 py-10 opacity-50">
-                    <svg class="w-16 h-16 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                    <p>Belum ada data di antrian</p>
+            <div class="p-6 md:p-8 border-b border-slate-200 bg-white flex justify-between items-center sticky top-0 z-20 shadow-sm lg:shadow-none">
+                <div>
+                    <h3 class="font-bold text-slate-800 text-lg">Antrian Upload</h3>
+                    <p class="text-[10px] text-slate-400 font-medium">Data aman (Auto-Saved)</p>
                 </div>
-                </div>
+                <span id="queueCount" class="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1.5 rounded-lg border border-slate-200">0 Data</span>
+            </div>
 
-            <div class="p-6 border-t border-white/10 bg-black/40 backdrop-blur-md">
-                <button onclick="submitBatch()" id="btnFinalSubmit" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-4 px-6 rounded-xl shadow-lg opacity-50 cursor-not-allowed transition hover:scale-[1.02]" disabled>
-                    KIRIM SEMUA DATA
+            <div id="queueContainer" class="flex-1 p-6 md:p-8 overflow-y-auto space-y-4 pb-40 lg:pb-8 min-h-[400px]">
+                <div id="emptyState" class="h-full flex flex-col items-center justify-center text-slate-400 py-10">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-4 shadow-sm border border-slate-100">
+                        <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    </div>
+                    <p class="text-sm font-bold text-slate-500">Antrian Kosong</p>
+                    <p class="text-xs mt-1 opacity-70">Tambahkan data dari formulir di kiri</p>
+                </div>
+            </div>
+
+            <div class="p-5 lg:p-8 bg-white border-t border-slate-200 fixed bottom-0 left-0 w-full z-40 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] lg:static lg:shadow-none lg:z-auto lg:w-auto">
+                <button onclick="submitBatch()" id="btnFinalSubmit" disabled 
+                    class="w-full bg-slate-200 text-slate-400 font-bold py-5 px-6 rounded-2xl transition-all flex justify-center items-center gap-2 cursor-not-allowed shadow-none">
+                    <span>KIRIM SEMUA DATA</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </button>
             </div>
         </div>
 
     </div>
 
-    <div id="loading" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center z-50">
-        <span class="loader mb-4"></span>
-        <h3 class="text-xl font-bold text-white">Mengirim ke Spreadsheet...</h3>
-        <p id="loadingText" class="text-sm text-gray-400 mt-2">Mohon tunggu, jangan tutup halaman.</p>
+    <div id="loading" class="hidden fixed inset-0 bg-white/95 backdrop-blur-md flex flex-col items-center justify-center z-[100]">
+        <div class="bg-white p-10 rounded-[2rem] shadow-2xl border border-slate-100 flex flex-col items-center text-center max-w-sm mx-4">
+            <div class="loader mb-6 border-brand border-b-transparent scale-150"></div>
+            <h3 class="text-xl font-bold text-slate-800">Mengirim Data...</h3>
+            <p id="loadingText" class="text-sm text-slate-500 mt-2">Mohon tunggu sebentar, data sedang diproses ke Spreadsheet.</p>
+        </div>
     </div>
 
     <script>
-        let uploadQueue = []; // Array penyimpanan sementara
+        // --- KONFIGURASI STORAGE ---
+        let uploadQueue = [];
+        const QUEUE_KEY = 'yanoshi_queue_final'; 
+        const DRAFT_KEY = 'yanoshi_draft_final'; 
+        let draftImages = []; // Memory sementara untuk gambar draft
 
-        // --- 1. SMART PARSER (Sama seperti sebelumnya) ---
+        // --- 1. INITIALIZE & RESTORE SYSTEM ---
+        window.addEventListener('load', () => {
+            // A. Pulihkan Antrian
+            const savedQueue = localStorage.getItem(QUEUE_KEY);
+            if (savedQueue) {
+                try {
+                    uploadQueue = JSON.parse(savedQueue);
+                    renderQueue();
+                } catch(e) { console.error("Gagal restore queue"); }
+            }
+
+            // B. Pulihkan Draft (Teks & Gambar)
+            restoreDraft();
+        });
+
+        // --- 2. DRAFT ENGINE (AUTO-SAVE INPUT) ---
+        const inputs = ['rawInput', 'pKode', 'pBerat', 'pNama', 'pBarang'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                if(id === 'rawInput') parseData(); 
+                saveDraft(); 
+            });
+        });
+
+        function saveDraft() {
+            const draftData = {
+                raw: document.getElementById('rawInput').value,
+                kode: document.getElementById('pKode').value,
+                berat: document.getElementById('pBerat').value,
+                nama: document.getElementById('pNama').value,
+                barang: document.getElementById('pBarang').value,
+                images: draftImages // Simpan array gambar base64
+            };
+            
+            try {
+                localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
+                showSaveIndicator();
+            } catch (e) {
+                console.warn("Storage penuh (gambar terlalu besar/banyak)");
+            }
+        }
+
+        function restoreDraft() {
+            const savedDraft = localStorage.getItem(DRAFT_KEY);
+            if (savedDraft) {
+                try {
+                    const data = JSON.parse(savedDraft);
+                    document.getElementById('rawInput').value = data.raw || "";
+                    document.getElementById('pKode').value = data.kode || "";
+                    document.getElementById('pBerat').value = data.berat || "";
+                    document.getElementById('pNama').value = data.nama || "";
+                    document.getElementById('pBarang').value = data.barang || "";
+
+                    // Restore Gambar
+                    if (data.images && data.images.length > 0) {
+                        draftImages = data.images;
+                        renderPreviewFromDraft();
+                        document.getElementById('restoredNotice').classList.remove('hidden');
+                    }
+                } catch (e) { console.error("Gagal restore draft"); }
+            }
+        }
+
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveStatus');
+            indicator.classList.remove('hidden');
+            clearTimeout(window.saveTimer);
+            window.saveTimer = setTimeout(() => indicator.classList.add('hidden'), 2000);
+        }
+
+        // --- 3. PARSER ENGINE ---
         const rawInput = document.getElementById('rawInput');
-        rawInput.addEventListener('input', function() {
-            let text = this.value;
+        function parseData() {
+            let text = rawInput.value;
             const weightRegex = /(\d+[\.,]?\d*)\s*(kg|gram|ons)/i;
             const weightMatch = text.match(weightRegex);
             let weight = weightMatch ? weightMatch[0] : "";
@@ -190,91 +337,96 @@
             document.getElementById('pNama').value = name;
             document.getElementById('pKode').value = code;
             document.getElementById('pBarang').value = goods;
+        }
+
+        // --- 4. IMAGE HANDLING (AUTO COMPRESS & SAVE) ---
+        const imageInput = document.getElementById('imageInput');
+        
+        imageInput.addEventListener('change', async function() {
+            draftImages = []; // Reset draft
+            document.getElementById('restoredNotice').classList.add('hidden');
+            
+            const files = Array.from(this.files).slice(0, 10);
+            
+            // Proses parallel compress
+            for (let file of files) {
+                try {
+                    const base64 = await compressImage(file);
+                    draftImages.push(base64);
+                } catch(e) { console.error(e); }
+            }
+            
+            renderPreviewFromDraft();
+            saveDraft(); // PENTING: Langsung simpan ke storage
         });
 
-        // --- 2. IMAGE PREVIEW ---
-        const imageInput = document.getElementById('imageInput');
-        imageInput.addEventListener('change', function() {
+        function renderPreviewFromDraft() {
             const gallery = document.getElementById('previewGallery');
             gallery.innerHTML = "";
-            Array.from(this.files).forEach(file => {
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(file);
-                img.className = "h-full w-24 object-cover rounded-lg border border-white/20";
-                gallery.appendChild(img);
-            });
-        });
-
-        // --- 3. ADD TO QUEUE LOGIC ---
-        async function addToQueue() {
-            const btn = document.getElementById('btnAdd');
-            const originalText = "<span>+ TAMBAH KE ANTRIAN</span>"; // Simpan teks asli
             
-            // Ambil Data Form
-            const nama = document.getElementById('pNama').value;
-            const kode = document.getElementById('pKode').value;
-            const barang = document.getElementById('pBarang').value;
-            const berat = document.getElementById('pBerat').value;
-            
-            // Validasi
-            if(!nama && !kode) { 
-                alert("Mohon isi Nama atau Kode terlebih dahulu."); 
-                return; 
+            if (draftImages.length === 0) {
+                gallery.innerHTML = '<span class="text-xs text-slate-400 italic mx-auto font-medium">Belum ada foto dipilih</span>';
+                return;
             }
 
-            // --- MULAI PROSES (SAFE MODE) ---
-            try {
-                // 1. Ubah Status Tombol jadi Loading
-                btn.innerHTML = `<span class="loader" style="width: 20px; height: 20px; border-width: 2px;"></span> Memproses...`;
-                btn.disabled = true;
-                btn.classList.add('opacity-75', 'cursor-wait');
+            draftImages.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = "h-20 w-20 object-cover rounded-xl border border-slate-200 shadow-sm flex-shrink-0 bg-white";
+                gallery.appendChild(img);
+            });
+        }
 
-                // 2. Proses Kompresi Gambar
-                let processedImages = [];
-                const files = document.getElementById('imageInput').files;
-                
-                if (files.length > 0) {
-                    for (let i = 0; i < Math.min(files.length, 10); i++) {
-                        try {
-                            // Kita bungkus kompresi per file agar jika 1 gagal, yang lain tetap jalan
-                            const base64 = await compressImage(files[i]);
-                            processedImages.push(base64);
-                        } catch (err) {
-                            console.error("Gagal kompres file ke-" + i, err);
-                        }
-                    }
+        // --- 5. QUEUE LOGIC ---
+        async function addToQueue() {
+            const btn = document.getElementById('btnAdd');
+            const nama = document.getElementById('pNama').value;
+            const kode = document.getElementById('pKode').value;
+            
+            if(!nama && !kode) { alert("Nama atau Kode wajib diisi!"); return; }
+
+            try {
+                btn.innerHTML = `<span class="loader border-white border-b-transparent" style="width:20px; height:20px;"></span> Memproses...`;
+                btn.disabled = true;
+
+                // Gunakan gambar dari draft memory
+                const finalImages = [...draftImages]; 
+
+                const newItem = {
+                    id: Date.now(),
+                    nama: nama || "-",
+                    kode: kode || "-",
+                    barang: document.getElementById('pBarang').value || "-",
+                    berat: document.getElementById('pBerat').value || "-",
+                    images: finalImages,
+                    imageCount: finalImages.length
+                };
+
+                // Validasi Storage Limit
+                try {
+                    // Coba simpan dummy dulu untuk cek kuota
+                    localStorage.setItem('test_quota', JSON.stringify(newItem));
+                    localStorage.removeItem('test_quota');
+                    
+                    uploadQueue.push(newItem);
+                    localStorage.setItem(QUEUE_KEY, JSON.stringify(uploadQueue));
+                    
+                    // Bersihkan Draft Form
+                    localStorage.removeItem(DRAFT_KEY);
+                    resetForm();
+                    renderQueue();
+
+                } catch (e) {
+                    alert("⚠️ Penyimpanan Browser Penuh! \nMohon 'Kirim Semua Data' yang ada di antrian dulu sebelum menambah lagi.");
                 }
 
-                // 3. Tambah ke Array Antrian
-                uploadQueue.push({
-                    id: Date.now(),
-                    nama: nama || "-", // Default strip jika kosong
-                    kode: kode || "-",
-                    barang: barang || "-",
-                    berat: berat || "-",
-                    images: processedImages,
-                    imageCount: processedImages.length
-                });
-
-                // 4. Render Ulang & Reset
-                renderQueue();
-                resetInputForm();
-
             } catch (error) {
-                // Jika ada error fatal, munculkan alert
-                console.error(error);
-                alert("Terjadi kesalahan saat memproses data: " + error.message);
-                
+                alert("Error: " + error.message);
             } finally {
-                // --- BAGIAN PENTING: FINALLY ---
-                // Kode di sini PASTI dieksekusi walau error sekalipun
-                // Kembalikan tombol ke kondisi semula
                 btn.innerHTML = `
-                    <svg class="w-5 h-5 group-hover:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                    <span>+ TAMBAH KE ANTRIAN</span>
-                `;
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                TAMBAH KE ANTRIAN`;
                 btn.disabled = false;
-                btn.classList.remove('opacity-75', 'cursor-wait');
             }
         }
 
@@ -284,156 +436,115 @@
             const btnFinal = document.getElementById('btnFinalSubmit');
             const countLabel = document.getElementById('queueCount');
 
-            // --- SAFETY CHECK (PENTING) ---
-            // Jika elemen HTML belum diupdate, hentikan fungsi agar tidak error
-            if (!container || !emptyState || !btnFinal) {
-                console.warn("Elemen Antrian tidak ditemukan. Pastikan Anda menggunakan HTML versi Batch Dashboard.");
-                return; 
-            }
+            Array.from(container.children).forEach(child => {
+                if(child.id !== 'emptyState') child.remove();
+            });
 
-            // Toggle Empty State
             if (uploadQueue.length === 0) {
-                emptyState.style.display = 'block'; // Di sini letak error sebelumnya
+                emptyState.style.display = 'flex';
                 btnFinal.disabled = true;
-                btnFinal.classList.add('opacity-50', 'cursor-not-allowed');
-                
-                // Bersihkan container tapi biarkan emptyState di dalamnya
-                // Cara aman: sembunyikan semua anak kecuali emptyState
-                Array.from(container.children).forEach(child => {
-                    if (child.id !== 'emptyState') child.remove();
-                });
+                btnFinal.className = "w-full bg-slate-200 text-slate-400 font-bold py-5 px-6 rounded-2xl transition-all flex justify-center items-center gap-2 cursor-not-allowed shadow-none";
             } else {
-                emptyState.style.display = 'none'; // Atau di sini
+                emptyState.style.display = 'none';
                 btnFinal.disabled = false;
-                btnFinal.classList.remove('opacity-50', 'cursor-not-allowed');
-                
-                // Re-render list
-                // Hapus semua kartu KECUALI emptyState
-                Array.from(container.children).forEach(child => {
-                    if (child.id !== 'emptyState') child.remove();
-                });
+                btnFinal.className = "w-full bg-brand hover:bg-brand-dark text-white font-bold py-5 px-6 rounded-2xl shadow-xl shadow-brand/20 transition-all transform hover:-translate-y-1 flex justify-center items-center gap-2";
 
-                // Masukkan kartu antrian baru
                 uploadQueue.forEach((item, index) => {
                     const card = document.createElement('div');
-                    card.className = "queue-card bg-white/5 border border-white/10 p-4 rounded-xl flex justify-between items-start mb-2"; // Tambah mb-2
+                    card.className = "animate-slide-up bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex justify-between items-start group hover:border-brand/50 transition-colors";
                     card.innerHTML = `
                         <div>
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="text-xs font-bold text-pink-400">#${index + 1}</span>
-                                <h4 class="font-bold text-white">${item.nama || "Tanpa Nama"}</h4>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="bg-brand-light text-brand text-[10px] font-bold px-2 py-1 rounded-md">#${index + 1}</span>
+                                <h4 class="font-bold text-slate-800 text-sm">${item.nama}</h4>
                             </div>
-                            <p class="text-xs text-gray-400">Kode: <span class="text-yellow-300">${item.kode}</span> | Berat: <span class="text-green-300">${item.berat}</span></p>
-                            <p class="text-xs text-gray-500 mt-1">${item.imageCount} Foto terlampir</p>
+                            <div class="flex gap-3 text-xs text-slate-500 mb-2">
+                                <div class="bg-slate-50 px-2 py-1 rounded"><span class="font-bold text-slate-700">Kode:</span> ${item.kode}</div>
+                                <div class="bg-slate-50 px-2 py-1 rounded"><span class="font-bold text-slate-700">Berat:</span> ${item.berat}</div>
+                            </div>
+                            <div class="text-[10px] text-slate-400 flex items-center gap-1 font-medium">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                ${item.imageCount} Foto terlampir
+                            </div>
                         </div>
-                        <button onclick="removeFromQueue(${item.id})" class="text-gray-500 hover:text-red-500 transition p-2">
+                        <button onclick="removeFromQueue(${item.id})" class="text-slate-300 hover:text-red-500 p-2 hover:bg-red-50 rounded-xl transition-all">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </button>
                     `;
                     container.appendChild(card);
                 });
             }
-            
-            if(countLabel) countLabel.innerText = uploadQueue.length + " Item";
+            countLabel.innerText = uploadQueue.length + " Data";
         }
 
         function removeFromQueue(id) {
             uploadQueue = uploadQueue.filter(item => item.id !== id);
+            localStorage.setItem(QUEUE_KEY, JSON.stringify(uploadQueue));
             renderQueue();
         }
 
-        function resetInputForm() {
-            rawInput.value = "";
+        function resetForm() {
+            document.getElementById('rawInput').value = "";
             document.getElementById('pNama').value = "";
             document.getElementById('pKode').value = "";
             document.getElementById('pBarang').value = "";
             document.getElementById('pBerat').value = "";
             document.getElementById('imageInput').value = "";
-            document.getElementById('previewGallery').innerHTML = "";
+            draftImages = [];
+            renderPreviewFromDraft();
+            document.getElementById('restoredNotice').classList.add('hidden');
         }
 
-        // --- 4. BATCH SUBMIT ENGINE ---
-        async function submitBatch() {
-            if (uploadQueue.length === 0) return;
+        function compressImage(file) {
+            return new Promise((resolve, reject) => {
+                if (!file.type.match(/image.*/)) { reject("Bukan gambar"); return; }
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 800; // Resize agar tidak memberatkan LocalStorage
+                        let w = img.width, h = img.height;
+                        if (w > MAX_WIDTH) { h *= MAX_WIDTH / w; w = MAX_WIDTH; }
+                        canvas.width = w; canvas.height = h;
+                        ctx.drawImage(img, 0, 0, w, h);
+                        resolve(canvas.toDataURL('image/jpeg', 0.6)); // Kompresi agak tinggi (0.6) untuk hemat storage
+                    };
+                    img.onerror = reject;
+                };
+                reader.onerror = reject;
+            });
+        }
 
+        async function submitBatch() {
             const loading = document.getElementById('loading');
-            const loadingText = document.getElementById('loadingText');
             loading.classList.remove('hidden');
-            loadingText.innerText = `Sedang mengupload ${uploadQueue.length} data paket...`;
+
+            // --- GANTI URL APPSCRIPT ANDA DI SINI ---
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwc79IQd3Fs6UiHVG-lkcLYUJ6PHygvY9jR2BgHCB7FEdy2Y-lfFdklLgb3VGIncDBI6w/exec"; 
 
             try {
-                // --- GANTI URL APPSCRIPT DI SINI ---
-                const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwc79IQd3Fs6UiHVG-lkcLYUJ6PHygvY9jR2BgHCB7FEdy2Y-lfFdklLgb3VGIncDBI6w/exec"; 
-
-                const payload = { entries: uploadQueue };
-
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ entries: uploadQueue })
                 });
 
-                alert("✅ SEMUA DATA BERHASIL DIKIRIM!");
-                uploadQueue = []; // Kosongkan antrian
+                alert("✅ SUKSES! Semua data berhasil dikirim.");
+                uploadQueue = [];
+                localStorage.removeItem(QUEUE_KEY);
+                localStorage.removeItem(DRAFT_KEY);
                 renderQueue();
-
+                resetForm();
             } catch (error) {
-                alert("❌ Terjadi kesalahan: " + error);
+                alert("❌ Gagal: " + error);
             } finally {
                 loading.classList.add('hidden');
             }
-        }
-
-        // --- UTILS ---
-        function compressImage(file) {
-            return new Promise((resolve, reject) => {
-                // Cek apakah file benar-benar gambar
-                if (!file.type.match(/image.*/)) {
-                    reject(new Error("File bukan gambar"));
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                
-                // Handler jika pembacaan file sukses
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
-                    
-                    // Handler jika gambar sukses dimuat di memori
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        
-                        // Resize Logic
-                        const MAX_WIDTH = 1000;
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        
-                        // Gambar ke canvas
-                        ctx.drawImage(img, 0, 0, width, height);
-                        
-                        // Convert ke JPG kompresi 0.7
-                        resolve(canvas.toDataURL('image/jpeg', 0.7));
-                    };
-
-                    // Handler jika gambar corrupt/rusak
-                    img.onerror = (error) => reject(error);
-                };
-
-                // Handler jika FileReader gagal
-                reader.onerror = (error) => reject(error);
-            });
         }
     </script>
 </body>
